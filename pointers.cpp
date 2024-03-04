@@ -33,7 +33,20 @@ int main()
 
     //implementation of pointer and cout is different for char and int 
 
-     
+    //  char name[9] = "SherBano";
+    //  char* c = &name[0];
+
+    //  cout << name << endl; //SherBano
+    //  cout << &name << endl; //104
+    //  cout << *(name +3)<< endl; //r
+    //  cout << c << endl; //SherBano
+    //  cout << &c << endl; // address of c
+    //  cout << *(c + 3) << endl; //r
+    //  cout << c+2 << endl; //erBano
+    //  cout << *c << endl; //S (first letter only will be printed )
+    //  cout << c+8<< endl; //error or nullvalue 
+
+    
 
   return 0;
 }

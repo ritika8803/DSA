@@ -1,119 +1,46 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
-class TrieNode{
-    public:
-    char data;
-    TrieNode* children[26];
-    bool isTerminal;
+bool isValidSubsequence(string &a, string &b, int pos) {
+    int n = a.size(), m = b.size();
+    if (n - pos < m) return false;
 
-    TrieNode(char d){
-        this -> data = d;
-        for(int i=0; i<26; i++){
-            children[i] = NULL;
+    bool changed = false;
+    int i = pos, j = 0;
+
+    while (i < n && j < m) {
+        if (a[i] == b[j]) {
+            i++;
+            j++;
+        } else if (!changed && j > 0) {
+            changed = true;
+            j++;
+        } else {
+            i++;
         }
-        this -> isTerminal = false;
-    }
-};
-
-void insertWord(TrieNode* root, string word){
-    //base case
-    if(word.length() == 0){
-        root -> isTerminal = true;
-        return;
     }
 
-    char ch = word[0];
-    int index = ch - 'a';
-    TrieNode* child;
-    if(root -> children[index] != NULL){
-        //present
-        child = root -> children[index];
-    }
-    else{
-        //not present
-        child = new TrieNode(ch);
-        root -> children[index] = child;
-    }
-
-    //recursive 
-    insertWord(child, word.substr(1));
-    
+    return (j == m || (j == m - 1 && !changed));
 }
 
-bool searchWord(TrieNode* root, string word){
-    //base case
-    if(word.length() == 0){
-        return root -> isTerminal;  
+int firstOccurrence(string &a, string &b) {
+    int n = a.size();
+    for (int i = 0; i < n; i++) {
+        if (isValidSubsequence(a, b, i)) {
+            return i + 1; // converting to 1-based index
+        }
     }
-
-    char ch = word[0];
-    int index = ch - 'a';
-    TrieNode* child;
-    if(root -> children[index] != NULL){
-        //present
-        child = root -> children[index];
-    }
-    else{
-        //not present
-        return false;
-    }
-
-    //recursive 
-    return searchWord(child, word.substr(1));
-    
+    return -1;
 }
 
-void deleteWord(TrieNode* root, string word){
-    cout << "deleting" << word << endl;
-    //base case
-    if(word.length() == 0){
-        root -> isTerminal = false;
-        return;
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        string a, b;
+        cin >> a >> b;
+        cout << firstOccurrence(a, b) << endl;
     }
-
-    char ch = word[0];
-    int index = ch - 'a';
-    TrieNode* child;
-    if(root -> children[index] != NULL){
-        //present
-        child = root -> children[index];
-    }
-
-    //recursive 
-    deleteWord(child, word.substr(1));
-    
-}
-
-int main(){
-
-    TrieNode* root = new TrieNode('-');
-    //insert
-    insertWord(root, "coding");
-    insertWord(root, "coder");
-    insertWord(root, "codehelp");
-    insertWord(root, "ritika");
-    insertWord(root, "ritu");
-    insertWord(root, "riti");
-
-    //search
-    if(searchWord(root, "ritu")){
-        cout << "present" << endl;
-    }
-    else{
-        cout << "not present" << endl;
-    }
-
-    //deletion
-    deleteWord(root, "ritu");
-
-    //searching after deleting
-    if(searchWord(root, "ritu")){
-        cout << "present" << endl;
-    }
-    else{
-        cout << "not present" << endl;
-    }
-
-  return 0;
+    return 0;
 }
